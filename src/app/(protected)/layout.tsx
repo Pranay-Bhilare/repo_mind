@@ -1,28 +1,104 @@
-'use client'
-import React from 'react'
-import { SidebarProvider } from '@/components/ui/sidebar'
-import { UserButton } from '@clerk/nextjs'
-import { AppSidebar } from './app-sidebar'
+"use client"
 
-type Props = {
-    children: React.ReactNode
-}
-const SidebarLayout = ({ children }: Props) => {
+import { useState, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { AppSidebar } from "./app-sidebar"
+import { UserNav } from "@/components/shared/user-nav"
+import { ThemeToggle } from "@/components/shared/theme-toggle"
+import { NotificationButton } from "@/components/shared/notification-button"
+import { SearchButton } from "@/components/shared/search-button"
+import { Menu, X } from "lucide-react"
+import { Button } from "@/components/ui/button"
+
+export default function ProtectedLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Check if on mobile device
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768) // 768px is typical md breakpoint
+    }
+    
+    // Check on initial load
+    checkIfMobile()
+    
+    // Check on resize
+    window.addEventListener('resize', checkIfMobile)
+    
+    return () => {
+      window.removeEventListener('resize', checkIfMobile)
+    }
+  }, [])
+
+  // Close sidebar on mobile when component mounts
+  useEffect(() => {
+    if (isMobile) {
+      setSidebarOpen(false)
+    } else {
+      setSidebarOpen(true)
+    }
+  }, [isMobile])
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen)
+  }
+
   return (
-    <SidebarProvider>
-        <AppSidebar/>
-        <main className='w-full m-2'>
-            <div className='flex item-center gap-2 border-sidebar-border bg-sidebar border shadow rounded-md p-2 px-4'>
-                <div className='m1-auto'></div>
-                <UserButton/>
-            </div>
-            <div className='h-4'></div>
-            <div className='border-sidebar-border bg-sidebar border shadow rounded-md overflow-y-scroll h-[calc(100vh - 6rem)] p-4'>
-                {children}
-            </div>
+    <div className="flex h-screen bg-background">
+      {/* Mobile overlay */}
+      {isMobile && sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-10"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div
+            initial={isMobile ? { x: -200 } : { x: 0 }}
+            animate={{ x: 0 }}
+            exit={isMobile ? { x: -200 } : { x: 0 }}
+            transition={{ duration: 0.2 }}
+            className={`fixed inset-y-0 left-0 z-20 md:relative md:z-0 h-full`}
+          >
+            <AppSidebar onClose={isMobile ? () => setSidebarOpen(false) : undefined} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Main content */}
+      <div className="flex flex-col flex-1 w-full overflow-hidden">
+        {/* Header */}
+        <header className="flex h-14 items-center border-b px-4 gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            className="mr-2"
+          >
+            {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
+          </Button>
+
+          <div className="ml-auto flex items-center gap-2">
+            <SearchButton />
+            <NotificationButton />
+            <ThemeToggle />
+            <UserNav />
+          </div>
+        </header>
+
+        {/* Page content */}
+        <main className="flex-1 overflow-auto p-4">
+          {children}
         </main>
-    </SidebarProvider>
+      </div>
+    </div>
   )
 }
-
-export default SidebarLayout
