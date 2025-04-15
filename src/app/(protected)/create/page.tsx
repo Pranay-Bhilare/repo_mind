@@ -8,12 +8,39 @@ import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { motion } from "framer-motion"
 import { ArrowRight, Code, FileText, ImageIcon, Sparkles } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { api } from "@/trpc/react"
+import { toast } from "sonner"
+type FormInput = {
+  repoURL: string,
+  projectName: string,
+  githubToken: string
+}
 
 export default function CreateProjectPage() {
+  const {register,handleSubmit,reset}= useForm<FormInput>()
+  const createProject = api.project.createProject.useMutation();
+  function onSubmit(data: FormInput) {
+    createProject.mutate({
+      name : data.projectName,
+      githubUrl : data.repoURL,
+      githubToken : data.githubToken
+    },{
+      onSuccess : () => { 
+        toast.success('Project Created Successfully !!')
+        reset();
+      },
+      onError : () => { 
+        toast.error('Failed to create project')
+      }
+    }
+    )
+    return true;
+  }
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
       <h1 className="text-3xl font-bold mb-2 gradient-text">Create Project</h1>
-      <p className="text-muted-foreground mb-8">Start a new project and bring your ideas to life</p>
+      <p className="text-muted-foreground mb-8">Link you repository with RepoMind</p>
 
       <Tabs defaultValue="blank" className="w-full">
         <TabsList className="grid grid-cols-4 mb-8">
@@ -55,29 +82,40 @@ export default function CreateProjectPage() {
                 <CardDescription>Fill in the details to create your new project</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="space-y-2">
-                  <Label htmlFor="name">Project Name</Label>
                   <Input
-                    id="name"
+                    {...register("projectName", {required : true})}
                     placeholder="Enter project name"
+                    className="transition-all duration-300 focus:border-primary focus:ring-primary"
+                    required
+                  />
+                </div>
+                <div className="h-2"></div>
+                <div className="space-y-2">
+                  <Input
+                    {...register("repoURL", {required : true})}
+                    placeholder="Enter you github URL"
+                    type="url"
+                    className="transition-all duration-300 focus:border-primary focus:ring-primary"
+                    required
+                  />
+                </div>
+                <div className="h-2"></div>
+                <div className="space-y-2">
+                  <Input
+                    {...register("githubToken")}
+                    placeholder="For importing private repo's.. (optional)"
                     className="transition-all duration-300 focus:border-primary focus:ring-primary"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    placeholder="Describe your project"
-                    className="min-h-32 transition-all duration-300 focus:border-primary focus:ring-primary"
-                  />
-                </div>
-              </CardContent>
-              <CardFooter className="flex justify-end">
-                <Button variant="sidebar">
+                <div className="h-4"></div>
+                <Button variant="sidebar" type="submit">
                   Create Project
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-              </CardFooter>
+                </form>
+              </CardContent>
             </Card>
           </motion.div>
         </TabsContent>
