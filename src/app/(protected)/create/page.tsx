@@ -110,7 +110,7 @@ export default function CreateProjectPage() {
                   />
                 </div>
                 <div className="h-4"></div>
-                <Button variant="sidebar" type="submit">
+                <Button variant="sidebar" type="submit" disabled={createProject.isPending}>
                   Create Project
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>

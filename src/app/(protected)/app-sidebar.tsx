@@ -5,6 +5,7 @@ import { LayoutDashboard, Bot, Presentation, CreditCard, Plus } from "lucide-rea
 import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import useProject from "@/hooks/use-project"
 
 // Application menu items
 const applicationItems = [
@@ -30,22 +31,6 @@ const applicationItems = [
   },
 ]
 
-// Project items
-const projectItems = [
-  {
-    title: "Project 1",
-    url: "/projects/1",
-  },
-  {
-    title: "Project 2",
-    url: "/projects/2",
-  },
-  {
-    title: "Project 3",
-    url: "/projects/3",
-  },
-]
-
 type AppSidebarProps = {
   onClose?: () => void
 }
@@ -53,6 +38,7 @@ type AppSidebarProps = {
 export function AppSidebar({ onClose }: AppSidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
+  const {projects, projectId, setProjectId} = useProject()
 
   const handleCreateProject = () => {
     router.push("/create")
@@ -120,21 +106,21 @@ export function AppSidebar({ onClose }: AppSidebarProps) {
             Your Projects
           </div>
           <ul className="space-y-0.5">
-            {projectItems.map((item) => (
-              <li key={item.title}>
+            {projects?.map((item) => (
+              <li key={item.name}>
                 <Link 
-                  href={item.url} 
+                  href={item.githubUrl} 
                   onClick={handleNavigation}
                   className={cn(
                     "flex items-center text-xs gap-2 px-3 py-1.5 rounded-md text-slate-300 hover:bg-white/10 hover:text-white transition-colors relative",
-                    pathname === item.url && "bg-white/15 text-white font-medium"
+                    pathname === item.githubUrl && "bg-white/15 text-white font-medium"
                   )}
                 >
                   <div className="flex items-center justify-center w-3.5 h-3.5 rounded bg-gradient-to-br from-accent to-accent/70 text-white text-[8px] font-medium shrink-0">
                     P
                   </div>
-                  <span>{item.title}</span>
-                  {pathname === item.url && (
+                  <span>{item.name}</span>
+                  {pathname === item.name && (
                     <div className="absolute left-0 top-0 h-full w-0.5 bg-accent rounded-r-md" />
                   )}
                 </Link>
