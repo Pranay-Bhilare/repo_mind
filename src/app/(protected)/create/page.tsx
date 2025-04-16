@@ -11,6 +11,7 @@ import { ArrowRight, Code, FileText, ImageIcon, Sparkles } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { api } from "@/trpc/react"
 import { toast } from "sonner"
+import useRefetch from "@/hooks/use-refetch"
 type FormInput = {
   repoURL: string,
   projectName: string,
@@ -20,6 +21,7 @@ type FormInput = {
 export default function CreateProjectPage() {
   const {register,handleSubmit,reset}= useForm<FormInput>()
   const createProject = api.project.createProject.useMutation();
+  const refetch=  useRefetch()
   function onSubmit(data: FormInput) {
     createProject.mutate({
       name : data.projectName,
@@ -28,6 +30,7 @@ export default function CreateProjectPage() {
     },{
       onSuccess : () => { 
         toast.success('Project Created Successfully !!')
+        refetch();
         reset();
       },
       onError : () => { 
