@@ -109,11 +109,14 @@ export function AppSidebar({ onClose }: AppSidebarProps) {
             {projects?.map((item) => (
               <li key={item.name}>
                 <Link 
-                  href={item.githubUrl} 
-                  onClick={handleNavigation}
+                  href={"/dashboard"} 
+                  onClick={()=>{
+                    setProjectId(item.id)
+                    handleNavigation()
+                  }}
                   className={cn(
                     "flex items-center text-xs gap-2 px-3 py-1.5 rounded-md text-slate-300 hover:bg-white/10 hover:text-white transition-colors relative",
-                    pathname === item.githubUrl && "bg-white/15 text-white font-medium"
+                    pathname === "/dashboard" && "bg-white/15 text-white font-medium"
                   )}
                 >
                   <div className="flex items-center justify-center w-3.5 h-3.5 rounded bg-gradient-to-br from-accent to-accent/70 text-white text-[8px] font-medium shrink-0">

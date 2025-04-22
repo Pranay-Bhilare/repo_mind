@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import "@/styles/globals.css"
 import { TRPCReactProvider } from "@/trpc/react"
 import { Toaster } from "sonner"
+import { ClerkProvider } from "@clerk/nextjs"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -20,10 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <TRPCReactProvider>
-          {children}
-          <Toaster richColors/>
-        </TRPCReactProvider>
+        <ClerkProvider>
+          <TRPCReactProvider>
+            {children}
+            <Toaster richColors/>
+          </TRPCReactProvider>
+        </ClerkProvider>
       </body>
     </html>
   )

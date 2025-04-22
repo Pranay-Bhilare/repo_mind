@@ -42,7 +42,7 @@ export default function CreateProjectPage() {
   }
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
-      <h1 className="text-3xl font-bold mb-2 gradient-text">Create Project</h1>
+      <h1 className="text-3xl font-bold mb-2 bg-gradient-to-br from-slate-750 via-slate-770 to-slate-750 bg-clip-text text-transparent">Create Project</h1>
       <p className="text-muted-foreground mb-8">Link you repository with RepoMind</p>
 
       <Tabs defaultValue="blank" className="w-full">
@@ -90,7 +90,7 @@ export default function CreateProjectPage() {
                   <Input
                     {...register("projectName", {required : true})}
                     placeholder="Enter project name"
-                    className="transition-all duration-300 focus:border-primary focus:ring-primary"
+                    className="transition-all duration-300 focus:border-slate-700 focus:ring-slate-700"
                     required
                   />
                 </div>
@@ -100,7 +100,7 @@ export default function CreateProjectPage() {
                     {...register("repoURL", {required : true})}
                     placeholder="Enter you github URL"
                     type="url"
-                    className="transition-all duration-300 focus:border-primary focus:ring-primary"
+                    className="transition-all duration-300 focus:border-slate-750 focus:ring-slate-750"
                     required
                   />
                 </div>
@@ -109,7 +109,7 @@ export default function CreateProjectPage() {
                   <Input
                     {...register("githubToken")}
                     placeholder="For importing private repo's.. (optional)"
-                    className="transition-all duration-300 focus:border-primary focus:ring-primary"
+                    className="transition-all duration-300 focus:border-slate-750 focus:ring-slate-750"
                   />
                 </div>
                 <div className="h-4"></div>

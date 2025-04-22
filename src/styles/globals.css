@@ -72,7 +72,7 @@
     @apply border-neutral-200 dark:border-neutral-800;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gradient-to-br from-slate-50 via-[#ebedf5] to-slate-100 text-foreground min-h-screen;
   }
 }
 
@@ -95,5 +95,45 @@
 
   .sidebar-item {
     @apply transition-all duration-200 hover:bg-primary/10 hover:text-primary;
+  }
+  
+  .shiny-effect {
+    @apply relative overflow-hidden;
+  }
+  
+  .shiny-effect::before {
+    @apply content-[''] absolute -top-1/2 -left-1/2 w-[200%] h-[200%] bg-gradient-to-r from-transparent via-white/20 to-transparent transform -rotate-45;
+    animation: shimmer 5s linear infinite;
+    z-index: 1;
+  }
+  
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-sm border border-white/30 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+  
+  .soft-shadow {
+    box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .floating {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-150%) rotate(-45deg);
+    }
+    100% {
+      transform: translateX(150%) rotate(-45deg);
+    }
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
   }
 }

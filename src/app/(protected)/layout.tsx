@@ -49,7 +49,10 @@ export default function ProtectedLayout({
   }
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen relative">
+      {/* Background with gradient and shiny effect */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-[#ebedf5] to-slate-100 shiny-effect -z-10"></div>
+      
       {/* Mobile overlay */}
       {isMobile && sidebarOpen && (
         <div 
@@ -76,7 +79,7 @@ export default function ProtectedLayout({
       {/* Main content */}
       <div className="flex flex-col flex-1 w-full overflow-hidden">
         {/* Header */}
-        <header className="flex h-14 items-center border-b px-4 gap-2">
+        <header className="flex h-14 items-center border-b bg-white/50 backdrop-blur-sm px-4 gap-2 z-10">
           <Button
             variant="ghost"
             size="icon"
@@ -95,7 +98,7 @@ export default function ProtectedLayout({
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-auto p-4">
+        <main className="flex-1 overflow-auto p-4 z-0">
           {children}
         </main>
       </div>

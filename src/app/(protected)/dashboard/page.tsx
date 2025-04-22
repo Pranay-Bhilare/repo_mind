@@ -1,8 +1,11 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart, LineChart, PieChart } from "lucide-react"
+import { BarChart, Github, LineChart, PieChart, Sidebar } from "lucide-react"
 import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import useProject from "@/hooks/use-project"
 
 export default function DashboardPage() {
   const container = {
@@ -20,11 +23,12 @@ export default function DashboardPage() {
     show: { y: 0, opacity: 1 },
   }
 
+  const {project} = useProject();
+
   return (
     <div style={{ fontSize: '0.875rem' }}>
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-        <h1 className="text-xl font-bold mb-0.5 gradient-text">Elliott</h1>
-        <h2 className="text-sm mb-3 text-muted-foreground font-normal">Chong</h2>
+        <h1 className="text-xl font-bold mb-0.5 gradient-text">{}</h1>
       </motion.div>
 
       <motion.div
@@ -33,61 +37,31 @@ export default function DashboardPage() {
         initial="hidden"
         animate="show"
       >
-        <motion.div variants={item}>
-          <Card className="card-hover border-slate-200/20 shadow-sm">
-            <CardHeader className="pb-1 p-2">
-              <CardTitle className="text-sm flex items-center gap-1.5">
-                <div className="p-1 rounded-md bg-slate-800/70 text-accent">
-                  <BarChart size={12} />
-                </div>
-                Activity
-              </CardTitle>
-              <CardDescription className="text-[10px]">Your recent activity</CardDescription>
-            </CardHeader>
-            <CardContent className="p-2 pt-0">
-              <div className="h-24 flex items-center justify-center bg-gradient-to-br from-slate-800/5 to-slate-700/5 rounded-md">
-                <div className="animate-pulse text-slate-500 text-[10px]">Activity Chart</div>
-              </div>
-            </CardContent>
-          </Card>
+        <motion.div variants={item} className="col-span-1">
+          <Button variant="sidebar" className="flex items-center gap-2">
+            <Github size={16} />
+            This project is linked to:&nbsp;
+            {project?.githubUrl ? (
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                {project.githubUrl}
+              </a>
+            ) : (
+              <span className="text-slate-400">No project selected</span>
+            )}
+          </Button>
         </motion.div>
-
-        <motion.div variants={item}>
-          <Card className="card-hover border-slate-200/20 shadow-sm">
-            <CardHeader className="pb-1 p-2">
-              <CardTitle className="text-sm flex items-center gap-1.5">
-                <div className="p-1 rounded-md bg-slate-800/70 text-accent">
-                  <LineChart size={12} />
-                </div>
-                Projects
-              </CardTitle>
-              <CardDescription className="text-[10px]">Your project overview</CardDescription>
-            </CardHeader>
-            <CardContent className="p-2 pt-0">
-              <div className="h-24 flex items-center justify-center bg-gradient-to-br from-slate-800/5 to-slate-700/5 rounded-md">
-                <div className="animate-pulse text-slate-500 text-[10px]">Projects Overview</div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <motion.div variants={item} className="sm:col-span-2 lg:col-span-1">
-          <Card className="card-hover border-slate-200/20 shadow-sm">
-            <CardHeader className="pb-1 p-2">
-              <CardTitle className="text-sm flex items-center gap-1.5">
-                <div className="p-1 rounded-md bg-slate-800/70 text-accent">
-                  <PieChart size={12} />
-                </div>
-                Tasks
-              </CardTitle>
-              <CardDescription className="text-[10px]">Your task completion</CardDescription>
-            </CardHeader>
-            <CardContent className="p-2 pt-0">
-              <div className="h-24 flex items-center justify-center bg-gradient-to-br from-slate-800/5 to-slate-700/5 rounded-md">
-                <div className="animate-pulse text-slate-500 text-[10px]">Tasks Overview</div>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Right side: Invitation Link and Archive */}
+        <motion.div
+          variants={item}
+          className="col-span-1 flex justify-end items-center gap-2 sm:col-span-1 lg:col-span-2"
+        >
+          <Button variant="sidebar">Invite a team member! </Button>
+          <Button variant="sidebar">Archive</Button>
         </motion.div>
       </motion.div>
 

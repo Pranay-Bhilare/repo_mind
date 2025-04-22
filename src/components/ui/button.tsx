@@ -21,7 +21,7 @@ const buttonVariants = cva(
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
         sidebar:
-          "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-cyan-100 shadow-md hover:opacity-90 border border-slate-700/50 btn-hover",
+          "bg-gradient-to-br from-slate-750 via-slate-770 to-slate-750 text-white shadow-md hover:opacity-90 border border-slate-700/50 btn-hover",
       },
       size: {
         default: "h-8 px-3 py-1.5 has-[>svg]:px-2.5",
