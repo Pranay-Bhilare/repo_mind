@@ -18,13 +18,13 @@ const CommitLog  = () => {
                   <img src={commit.commitAuthorAvatar} alt={commit.commitAuthorName} className="relative mt-0.5 ml-0.5 w-16 h-16 max-w-[64px] max-h-[64px] flex-none rounded-full border border-gray-200 shadow-sm bg-gray-50 object-cover" />
                   <div className="flex-1 rounded-lg bg-white px-4 py-2 ring-1 ring-inset ring-gray-200">
                     <div className="flex items-center justify-between gap-x-2">
-                      <Link target="_blank" href={`${project?.githubUrl}/commits/${commit.commitHash}`} className="text-xs font-semibold text-gray-900 hover:underline flex items-center gap-1">
+                      <a target="_blank" href={`${project?.githubUrl}/commit/${commit.commitHash}`} className="text-xs font-semibold text-gray-900 hover:underline flex items-center gap-1">
                         <span>{commit.commitAuthorName}</span>
                         <span className="inline-flex items-center text-gray-500 font-normal">
                           committed
                           <ExternalLink className="ml-1 size-3.5" />
                         </span>
-                      </Link>
+                      </a>
                     </div>
                     <div className="mt-0.5 text-sm font-medium text-gray-800 leading-tight truncate">
                       {commit.commitMessage}
