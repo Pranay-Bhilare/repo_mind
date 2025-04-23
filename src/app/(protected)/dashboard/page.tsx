@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import useProject from "@/hooks/use-project"
+import CommitLog from "./commit-log"
 
 export default function DashboardPage() {
   const container = {
@@ -70,13 +71,15 @@ export default function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
       >
-        <Card className="card-hover border-slate-200/20 shadow-sm">
+        {/* <Card className="card-hover border-slate-200/20 shadow-sm">
           <CardHeader className="p-2 pb-1">
             <CardTitle className="text-sm">Recent Updates</CardTitle>
             <CardDescription className="text-[10px]">The latest updates from your projects</CardDescription>
           </CardHeader>
-          <CardContent className="p-2">
-            <div className="space-y-2">
+          <CardContent className="p-2"> */}
+          <div className="mt-8"></div>
+            <CommitLog/>
+            {/* <div className="space-y-2">
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
@@ -91,9 +94,9 @@ export default function DashboardPage() {
                   </div>
                 </div>
               ))}
-            </div>
-          </CardContent>
-        </Card>
+            </div> */}
+          {/* </CardContent>
+        </Card> */}
       </motion.div>
     </div>
   )
