@@ -1,7 +1,8 @@
 import {GoogleGenerativeAI} from "@google/generative-ai"
+import type { Document } from "@langchain/core/documents";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API!)
-const model = genAI.getGenerativeModel({model : "gemini-2.0-flash-lite"})
+const model = genAI.getGenerativeModel({model : "gemini-1.5-flash"})
 
 export const aiSummariseCommit = async (diff: string) => {
     try {
@@ -43,4 +44,32 @@ export const aiSummariseCommit = async (diff: string) => {
         console.error("Error generating commit summary:", error);
         return "Failed to generate summary due to an error.";
     }
+}
+
+export const summariseCode =  async (doc: Document) => {
+    const code = doc.pageContent.slice(0,10000)  // Limit to 10k characters
+    try {
+        const response = await model.generateContent([
+            `You are an intelligent senior software engineer who specializes in onboarding junior software engineers onto projects.
+            You are onboarding a junior software engineer and explaining to them the purpose of the ${doc.metadata.source} file
+            
+            Here is the code 
+            ---
+            ${code}
+            ---
+            
+            Give me a summary no more than 100 words of the code provided above`
+        ]);
+        return response.response.text();
+    } catch (error){
+        console.error("Error generating code summary:", error);
+        return "Failed to generate summary due to an error.";
+    }
+}
+
+export const generateEmbedding = async (text: string) => {
+    const model = genAI.getGenerativeModel({model : "text-embedding-004"});
+    const result = await model.embedContent(text);
+    const embeddings =  result.embedding
+    return embeddings.values;
 }
