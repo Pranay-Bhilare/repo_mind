@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import useProject from "@/hooks/use-project"
 import CommitLog from "./commit-log"
+import AskQuestionCard from "./ask-question-card"
 
 export default function DashboardPage() {
   const container = {
@@ -71,6 +72,8 @@ export default function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
       >
+        <div className="mt-8"></div>
+        <AskQuestionCard/>
         {/* <Card className="card-hover border-slate-200/20 shadow-sm">
           <CardHeader className="p-2 pb-1">
             <CardTitle className="text-sm">Recent Updates</CardTitle>
