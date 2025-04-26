@@ -1,3 +1,4 @@
+'use server'
 import { createStreamableValue } from 'ai/rsc'
 import {streamText} from 'ai'
 import { createGoogleGenerativeAI } from '@ai-sdk/google' 
@@ -11,24 +12,27 @@ const google = createGoogleGenerativeAI({
 export async function askQuestion(question: string, projectId: string) {
     const stream = createStreamableValue();
     const queryVector = await generateEmbedding(question);
-    const vectorQuery = `{${queryVector.join(',')}}`
+    const vectorQuery = `[${queryVector.join(',')}]`
 
     const result = await db.$queryRaw`
         SELECT "fileName", "sourceCode", "summary",
         1 - ("summaryEmbedding" <=> ${vectorQuery}::vector) AS similarity
-        FROM SourceCodeEmbedding
+        FROM "SourceCodeEmbeddings"
         WHERE 1 - ("summaryEmbedding" <=> ${vectorQuery}::vector) > 0.5
         AND "projectId" = ${projectId}
         ORDER BY similarity DESC
         LIMIT 10` as {fileName: string, sourceCode: string, summary: string}[]
 
         let context = ''
+        console.log('askQuestion: result from DB:', result);
         for (const item of result) {
             context += `Source: ${item.fileName}\nSummary: ${item.summary}\nSource Code: ${item.sourceCode}\n\n`
+            console.log('askQuestion: context after item', item.fileName, context);
         }
-
+        console.log('askQuestion: final context:', context);
+        
         (async () => {
-            const { textStream } = await streamText({
+            const { textStream } = streamText({
                 model: google('gemini-1.5-flash'),
                 prompt: `You are a ai code assistant who answers questions about the codebase. Your target audience is a technical intern who is looking to understand the codebase.
                 AI assistant is a brand new, powerful, human-like artificial intelligence.
@@ -58,7 +62,7 @@ export async function askQuestion(question: string, projectId: string) {
         })();
 
         return {
-            output : stream,
+            output : stream.value,
             fileReferred : result
         }
 

@@ -5,19 +5,40 @@ import { Textarea } from '@/components/ui/textarea';
 import useProject from '@/hooks/use-project';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import React from 'react'
-
+import { askQuestion } from './action';
+import { readStreamableValue } from 'ai/rsc';
+import MDEditor from '@uiw/react-md-editor';
+import CodeReferences from './code-references';
 const AskQuestionCard = () => {
     const [question, setQuestion] = React.useState('')
     const {project} = useProject();
     const [open, setOpen] = React.useState(false);
+    const [loading,setLoading] = React.useState(false);
+    const [fileReferred,setFileReferred] = React.useState<{fileName : string; sourceCode : string; summary: string}[]>()
+    const [answer, setAnswer] = React.useState('');
+
     const onSubmit = async (e: React.FormEvent) => {
+        setAnswer('')
+        setFileReferred([])
         e.preventDefault();
+        if(!project?.id) return;
+        setLoading(true)
+
+        const { output, fileReferred } = await askQuestion(question,project.id)
         setOpen(true)
+        setFileReferred(fileReferred)
+
+        for await (const chunks of readStreamableValue(output)){
+          if(chunks){
+            setAnswer(answer => answer + chunks)
+          }
+        }
+        setLoading(false)
     }
   return (
     <>
         <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent className='sm:max-w-[80vw]'>
             <DialogHeader>
                 <DialogTitle>
                   <span className="flex items-center gap-2">
@@ -31,6 +52,15 @@ const AskQuestionCard = () => {
                   </span>
                 </DialogTitle>
              </DialogHeader>
+            <div className="max-w-[80vw] max-h-[40vh] overflow-auto rounded-lg bg-white/95 p-4 shadow-inner border border-slate-200 text-slate-800 prose prose-slate dark:prose-invert dark:bg-slate-900/90 dark:text-slate-100">
+              <MDEditor.Markdown source={answer} className="!bg-transparent !text-inherit !shadow-none !border-none" />
+            </div>
+            <CodeReferences fileReferred={fileReferred || []}/>
+            <Button variant='sidebar' type='button' onClick={() => {setOpen(false)}}>
+            Close
+            </Button>
+          
+
             </DialogContent>
         </Dialog>
         <Card className='relative w-3/5'>
@@ -43,7 +73,7 @@ const AskQuestionCard = () => {
                 <form onSubmit={onSubmit}>
                     <Textarea placeholder="Ask a question about the project..." value = {question} onChange={e => setQuestion(e.target.value)}></Textarea>
                     <div className='h-4'></div>
-                    <Button variant="sidebar" type='submit'>Ask RepoMind !</Button>
+                    <Button variant="sidebar" type='submit' disabled={loading}>Ask RepoMind</Button>
                 </form>
             </CardContent>
         </Card>

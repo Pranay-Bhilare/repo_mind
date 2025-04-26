@@ -2,7 +2,7 @@ import {GoogleGenerativeAI} from "@google/generative-ai"
 import type { Document } from "@langchain/core/documents";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API!)
-const model = genAI.getGenerativeModel({model : "gemini-1.5-flash"})
+const model = genAI.getGenerativeModel({model : "gemini-1.5-flash-8b"})
 
 export const aiSummariseCommit = async (diff: string) => {
     try {
@@ -68,8 +68,9 @@ export const summariseCode =  async (doc: Document) => {
 }
 
 export const generateEmbedding = async (text: string) => {
-    const model = genAI.getGenerativeModel({model : "text-embedding-004"});
-    const result = await model.embedContent(text);
+    const model2 = genAI.getGenerativeModel({model : "text-embedding-004"});
+    const result = await model2.embedContent(text);
     const embeddings =  result.embedding
+    console.log("Question embeddings are : ",embeddings);
     return embeddings.values;
 }
