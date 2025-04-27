@@ -19,6 +19,7 @@ model User {
   emailId        String          @unique
   credits        Int             @default(150)
   userToProjects UserToProject[]
+  questionsAsked Question[]
 }
 
 model SourceCodeEmbeddings {
@@ -41,6 +42,7 @@ model Project {
   commits        Commits[]
   userToProjects UserToProject[]
   embeddings     SourceCodeEmbeddings[]
+  savedQuestions Question[]
 }
 
 model UserToProject {
@@ -67,4 +69,21 @@ model Commits {
   summary            String
   commitMessage      String
   project            Project  @relation(fields: [projectId], references: [id])
+}
+
+model Question {
+  id                 String   @id @default(cuid())
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  question           String
+  answer             String
+
+  filesReferred      Json?
+
+  projectId          String
+  project            Project @relation(fields: [projectId],  references: [id])
+
+  userId             String
+  user               User @relation(fields: [userId], references:[id])
 }

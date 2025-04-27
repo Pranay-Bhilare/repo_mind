@@ -9,6 +9,8 @@ import { askQuestion } from './action';
 import { readStreamableValue } from 'ai/rsc';
 import MDEditor from '@uiw/react-md-editor';
 import CodeReferences from './code-references';
+import { api } from '@/trpc/react';
+import { toast } from 'sonner';
 const AskQuestionCard = () => {
     const [question, setQuestion] = React.useState('')
     const {project} = useProject();
@@ -16,7 +18,7 @@ const AskQuestionCard = () => {
     const [loading,setLoading] = React.useState(false);
     const [fileReferred,setFileReferred] = React.useState<{fileName : string; sourceCode : string; summary: string}[]>()
     const [answer, setAnswer] = React.useState('');
-
+    const saveAnswer = api.project.saveAnswers.useMutation()
     const onSubmit = async (e: React.FormEvent) => {
         setAnswer('')
         setFileReferred([])
@@ -40,7 +42,8 @@ const AskQuestionCard = () => {
         <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className='sm:max-w-[80vw]'>
             <DialogHeader>
-                <DialogTitle>
+              <div className='flex items-center gap-2'>
+              <DialogTitle>
                   <span className="flex items-center gap-2">
                     <span className="text-slate-770 animate-pulse-glow">
                       <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -51,6 +54,22 @@ const AskQuestionCard = () => {
                     </span>
                   </span>
                 </DialogTitle>
+                <Button variant={'sidebar'} type='button' disabled = {saveAnswer.isPending} onClick={()=> {
+                  saveAnswer.mutate({
+                    projectId: project!.id,
+                    question,
+                    answer,
+                    filesReferred: fileReferred || []
+                  }, {
+                    onSuccess: () => {
+                      toast.success('Answer Saved')
+                    },
+                    onError: () => {
+                      toast.error('Failed to save answer !')
+                    }
+                  })
+                }} > Save Answer</Button>
+              </div>
              </DialogHeader>
             <div className="max-w-[80vw] max-h-[40vh] overflow-auto rounded-lg bg-white/95 p-4 shadow-inner border border-slate-200 text-slate-800 prose prose-slate dark:prose-invert dark:bg-slate-900/90 dark:text-slate-100">
               <MDEditor.Markdown source={answer} className="!bg-transparent !text-inherit !shadow-none !border-none" />
