@@ -1,29 +1,81 @@
-# Create T3 App
+# RepoMind
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+RepoMind is an AI-powered codebase assistant that helps you ask questions about your projects, explore code, and manage project knowledge efficiently. Built with the T3 Stack (Next.js, tRPC, Prisma, Tailwind CSS), it leverages modern AI and collaborative tools for a seamless developer experience.
 
-## What's next? How do I make an app with this?
+## Features
+- **AI Q&A:** Ask questions about your codebase and get AI-generated answers with code references.
+- **Project Management:** Create, view, and switch between multiple projects.
+- **Code Reference Tracking:** Answers include referenced files and summaries.
+- **User Authentication:** Secure login and user management with Clerk.
+- **Modern UI:** Responsive, accessible, and visually appealing interface using Tailwind CSS and Radix UI components.
+- **Database Integration:** Uses PostgreSQL with Prisma ORM and vector extensions for embeddings.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Tech Stack
+- [Next.js](https://nextjs.org) (App Router, SSR)
+- [tRPC](https://trpc.io) (API layer)
+- [Prisma](https://prisma.io) (ORM)
+- [Tailwind CSS](https://tailwindcss.com) (Styling)
+- [Clerk](https://clerk.dev) (Authentication)
+- [AI SDKs](https://www.npmjs.com/package/ai) (AI features)
+- [Radix UI](https://www.radix-ui.com/) (UI components)
+- [Framer Motion](https://www.framer.com/motion/) (Animations)
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Getting Started
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### Prerequisites
+- Node.js (v18+ recommended)
+- npm (v9+)
+- PostgreSQL database
 
-## Learn More
+### Installation
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/yourusername/repo_mind.git
+   cd repo_mind
+   ```
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
+3. **Configure environment variables:**
+   - Copy `.env.example` to `.env` and fill in the required values (e.g., `DATABASE_URL`, Clerk keys, AI provider keys).
+4. **Set up the database:**
+   ```sh
+   npx prisma migrate dev
+   npx prisma generate
+   ```
+5. **Run the development server:**
+   ```sh
+   npm run dev
+   ```
+   The app will be available at [http://localhost:3000](http://localhost:3000).
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Usage
+- **Sign in** with your Clerk account.
+- **Create a new project** or select an existing one from the sidebar.
+- **Ask questions** about your codebase from the dashboard.
+- **Save answers** and view referenced files for future reference.
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+## Project Structure
+- `src/app/` — Main application routes and layouts
+- `src/components/` — Shared and UI components
+- `src/hooks/` — Custom React hooks
+- `src/lib/` — Utility libraries (AI, GitHub integration, etc.)
+- `src/server/` — API and database logic
+- `prisma/` — Prisma schema and migrations
+- `public/` — Static assets
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Scripts
+- `npm run dev` — Start the development server
+- `npm run build` — Build for production
+- `npm run preview` — Preview the production build
+- `npm run lint` — Lint the codebase
+- `npm run format:write` — Format code with Prettier
+- `npm run db:generate` — Run Prisma migrations
 
-## How do I deploy this?
+## Contributing
+Pull requests and issues are welcome! Please open an issue to discuss your ideas or report bugs.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+---
+
+This project was bootstrapped with [create-t3-app](https://create.t3.gg/).
