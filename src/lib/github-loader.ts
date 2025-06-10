@@ -5,7 +5,7 @@ import { db } from "@/server/db";
 
 export const loadGithubRepo = async (githubUrl: string, githubToken? : string) => {
     const loader = new GithubRepoLoader(githubUrl, {
-        branch: "main",
+        branch: "master",
         recursive: true,
         unknown: "warn",
         accessToken: githubToken || '',
