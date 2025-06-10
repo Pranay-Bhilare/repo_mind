@@ -87,3 +87,9 @@ model Question {
   userId             String
   user               User @relation(fields: [userId], references:[id])
 }
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+}

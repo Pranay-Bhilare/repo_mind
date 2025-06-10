@@ -21,7 +21,7 @@ type FormInput = {
 export default function CreateProjectPage() {
   const {register,handleSubmit,reset}= useForm<FormInput>()
   const createProject = api.project.createProject.useMutation();
-  const refetch=  useRefetch()
+  const refetch = useRefetch()
   function onSubmit(data: FormInput) {
     createProject.mutate({
       name : data.projectName,
@@ -30,7 +30,8 @@ export default function CreateProjectPage() {
     },{
       onSuccess : () => { 
         toast.success('Project Created Successfully !!')
-        refetch();
+        // eslint-disable @typescript-eslint/no-floating-promises
+        void refetch();
         reset();
       },
       onError : () => { 

@@ -25,18 +25,39 @@ export const getCommitHashes = async(githubUrl :  string) => {
         owner,
         repo
     })
-    const sortedCommits = data.sort((a, b) => {
+    // Define the type for the commit object
+    type CommitData = {
+        sha: string;
+        commit: {
+            message: string;
+            author?: {
+                name?: string;
+                date?: string;
+            };
+        };
+        author?: {
+            avatar_url?: string;
+        };
+    };
+    const sortedCommits = (data as CommitData[]).sort((a, b) => {
         const dateA = a.commit.author?.date ? new Date(a.commit.author.date).getTime() : 0;
         const dateB = b.commit.author?.date ? new Date(b.commit.author.date).getTime() : 0;
         return dateB - dateA;
     });
 
-    return sortedCommits.slice(0,10).map((commit: any) => ({
+    /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
+    /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+    /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+    /* eslint-disable @typescript-eslint/no-unsafe-argument */
+    // eslint-disable @typescript-eslint/no-explicit-any
+    return sortedCommits.slice(0,10).map((commit: CommitData) => ({
         commitMessage : commit.commit.message,
         commitHash : commit.sha,
-        commitAuthorName : commit.commit.author?.name || "Unknown",
-        commitAuthorAvatar : commit.author?.avatar_url || "",
-        commitDate : commit.commit.author?.date || "",
+        commitAuthorName : commit.commit.author?.name ?? "Unknown",
+        commitAuthorAvatar : commit.author?.avatar_url ?? "",
+        commitDate : commit.commit.author?.date ?? "",
     }))
 }
 

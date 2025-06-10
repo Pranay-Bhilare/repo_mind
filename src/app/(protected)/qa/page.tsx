@@ -11,7 +11,7 @@ import CodeReferences from "../dashboard/code-references"
 
 export default function QAPage() {
   const {projectId} = useProject()
-  const {data : questions}  = api.project.getQuestions.useQuery({ projectId: projectId! })
+  const {data : questions}  = api.project.getQuestions.useQuery({ projectId: projectId })
   const [questionIndex, setQuestionIndex] = React.useState(0)
   const question = questions?.[questionIndex]
   return (
@@ -63,7 +63,7 @@ export default function QAPage() {
                 <div className="max-w-[80vw] max-h-[43vh] overflow-auto rounded-lg bg-white/95 p-4 shadow-inner border border-slate-200 text-slate-800 prose prose-slate dark:prose-invert dark:bg-slate-900/90 dark:text-slate-100">
                 <MDEditor.Markdown source={question.answer} className="!bg-transparent !text-inherit !shadow-none !border-none"/>
                 </div>
-                <CodeReferences fileReferred={question.filesReferred ?? [] as any} />
+                {/* <CodeReferences fileReferred={question.filesReferred ?? []} /> */}
               </SheetHeader>
             </SheetContent>
           )}

@@ -9,6 +9,7 @@ import { NotificationButton } from "@/components/shared/notification-button"
 import { SearchButton } from "@/components/shared/search-button"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { UserButton } from "@clerk/nextjs"
 
 export default function ProtectedLayout({
   children,
@@ -90,10 +91,7 @@ export default function ProtectedLayout({
           </Button>
 
           <div className="ml-auto flex items-center gap-2">
-            <SearchButton />
-            <NotificationButton />
-            <ThemeToggle />
-            <UserNav />
+            <UserButton />
           </div>
         </header>
 

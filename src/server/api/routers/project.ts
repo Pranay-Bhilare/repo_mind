@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter,protectedProcedure } from "../trpc";
 import { pullCommits } from "@/lib/github";
 import { indexGithubRepo } from "@/lib/github-loader";
+import { Prisma } from "@prisma/client";
 
 export const projectRouter = createTRPCRouter({
     createProject: protectedProcedure.input(
@@ -17,7 +18,7 @@ export const projectRouter = createTRPCRouter({
                 githubUrl:input.githubUrl,
                 userToProjects : {
                     create: { 
-                        userId: (await ctx.user).userId!
+                        userId: ctx.user.userId!
                     }
                 }
             }
@@ -31,7 +32,7 @@ export const projectRouter = createTRPCRouter({
             where: {
                 userToProjects:{
                     some : {
-                        userId : (await ctx.user).userId!
+                        userId : ctx.user.userId!
                     }
                 },
                 deletedAt : null
@@ -63,9 +64,9 @@ export const projectRouter = createTRPCRouter({
             data: {
                 answer : input.answer,
                 question : input.question,
-                filesReferred : input.filesReferred,
+                filesReferred : input.filesReferred as Prisma.InputJsonValue,
                 projectId : input.projectId,
-                userId : (await ctx.user).userId!
+                userId : ctx.user.userId!
             }
         })
    }),

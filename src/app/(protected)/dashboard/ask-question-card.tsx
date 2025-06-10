@@ -61,11 +61,12 @@ const AskQuestionCard = () => {
                     projectId: project!.id,
                     question,
                     answer,
-                    filesReferred: fileReferred || []
+                    filesReferred: fileReferred ?? []
                   }, {
                     onSuccess: () => {
                       toast.success('Answer Saved')
-                      refetch()
+                      // eslint-disable @typescript-eslint/no-floating-promises
+                      void refetch();
                     },
                     onError: () => {
                       toast.error('Failed to save answer !')
@@ -77,7 +78,7 @@ const AskQuestionCard = () => {
             <div className="max-w-[80vw] max-h-[40vh] overflow-auto rounded-lg bg-white/95 p-4 shadow-inner border border-slate-200 text-slate-800 prose prose-slate dark:prose-invert dark:bg-slate-900/90 dark:text-slate-100">
               <MDEditor.Markdown source={answer} className="!bg-transparent !text-inherit !shadow-none !border-none" />
             </div>
-            <CodeReferences fileReferred={fileReferred || []}/>
+            <CodeReferences fileReferred={fileReferred ?? []}/>
             <Button variant='sidebar' type='button' onClick={() => {setOpen(false)}}>
             Close
             </Button>

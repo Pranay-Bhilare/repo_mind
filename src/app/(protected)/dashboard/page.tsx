@@ -62,7 +62,7 @@ export default function DashboardPage() {
           variants={item}
           className="col-span-1 flex justify-end items-center gap-2 sm:col-span-1 lg:col-span-2"
         >
-          <Button variant="sidebar">Invite a team member! </Button>
+          {/* <Button variant="sidebar">Invite a team member! </Button> */}
           <Button variant="sidebar">Archive</Button>
         </motion.div>
       </motion.div>

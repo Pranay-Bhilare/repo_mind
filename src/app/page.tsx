@@ -217,7 +217,7 @@ export default function Home() {
                 </div>
                 <div className="max-w-[80%] bg-gradient-to-br from-slate-900/90 to-slate-800/90 border border-accent/30 text-slate-100 px-4 py-2 rounded-xl rounded-bl-sm shadow text-sm font-medium">
                   RepoMind is your intelligent <span className="text-accent font-semibold">GitHub codebase assistant</span>. Instantly ask questions, get AI-powered answers, and manage your projects.<br/>
-                  <span className="text-accent font-semibold">Click "Get Started" to experience the future of code understanding!</span>
+                  <span className="text-accent font-semibold">Click Get Started to experience the future of code understanding!</span>
                 </div>
               </div>
             </motion.div>

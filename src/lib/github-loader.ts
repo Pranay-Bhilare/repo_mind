@@ -8,7 +8,7 @@ export const loadGithubRepo = async (githubUrl: string, githubToken? : string) =
         branch: "master",
         recursive: true,
         unknown: "warn",
-        accessToken: githubToken || '',
+        accessToken: githubToken ?? '',
         ignoreFiles: ['package-lock.json','yarn.lock','pnpm-lock.yaml','bun.lockb'],
         maxConcurrency: 5,
     });
@@ -25,8 +25,11 @@ export const indexGithubRepo = async (projectId :string,githubUrl: string, githu
         const sourceCodeEmbedding = await db.sourceCodeEmbeddings.create({
             data : {
                 summary : embedding.summary,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 sourceCode : embedding.sourceCode,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 fileName : embedding.fileName,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 projectId : projectId
             }
         })
@@ -45,7 +48,9 @@ const generateEmbeddings = async(docs : Document[]) => {
         return {
             summary,
             embeddings,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             sourceCode : JSON.parse(JSON.stringify(doc.pageContent)),
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             fileName : doc.metadata.source
         }
     }))
