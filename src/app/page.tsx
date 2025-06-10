@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Sparkles, Bot, LayoutDashboard, FileText } from "lucide-react";
+import { useUser } from '@clerk/nextjs';
 
 const features = [
   {
@@ -32,6 +33,7 @@ const features = [
 ];
 
 export default function Home() {
+  const { isSignedIn } = useUser();
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-between relative overflow-hidden">
       {/* Animated geometric background shapes */}
@@ -78,7 +80,7 @@ export default function Home() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative z-10 flex flex-col md:flex-row items-center justify-center pt-32 pb-16 w-full max-w-7xl gap-12 px-4">
+      <section className="relative z-10 flex flex-col md:flex-row items-center justify-center min-h-screen w-full max-w-7xl gap-12 px-4">
         {/* Left: Animated Logo & Title */}
         <div className="flex flex-col items-center md:items-start flex-1">
           <motion.div
@@ -163,12 +165,21 @@ export default function Home() {
             transition={{ duration: 1, delay: 1.2 }}
             className="flex gap-4"
           >
-            <Link
-              href="/dashboard"
-              className="px-8 py-3 rounded-full bg-gradient-to-r from-slate-800 via-accent to-slate-700 text-accent-foreground font-bold text-lg shadow-lg hover:scale-105 transition-transform duration-300 focus:outline-none focus:ring-4 focus:ring-accent/40 border-2 border-slate-700/60 animate-pulse-glow"
-            >
-              Get Started
-            </Link>
+            {isSignedIn ? (
+              <Link
+                href="/dashboard"
+                className="px-8 py-3 rounded-full bg-gradient-to-r from-slate-800 via-accent to-slate-700 text-accent-foreground font-bold text-lg shadow-lg hover:scale-105 transition-transform duration-300 focus:outline-none focus:ring-4 focus:ring-accent/40 border-2 border-slate-700/60 animate-pulse-glow"
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <Link
+                href="/sign-in"
+                className="px-8 py-3 rounded-full bg-gradient-to-r from-slate-800 via-accent to-slate-700 text-accent-foreground font-bold text-lg shadow-lg hover:scale-105 transition-transform duration-300 focus:outline-none focus:ring-4 focus:ring-accent/40 border-2 border-slate-700/60 animate-pulse-glow"
+              >
+                Get Started
+              </Link>
+            )}
             <a
               href="#features"
               className="px-8 py-3 rounded-full bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-accent font-bold text-lg shadow-lg hover:scale-105 transition-transform duration-300 focus:outline-none focus:ring-4 focus:ring-accent/40 border-2 border-slate-700/60"
@@ -177,59 +188,56 @@ export default function Home() {
             </a>
           </motion.div>
         </div>
-        {/* Right: Animated AI Chat Bubble Showcase */}
+        {/* Right: Subtle, compact chat card */}
         <motion.div
           className="hidden md:flex flex-1 items-center justify-center relative"
           initial={{ opacity: 0, x: 60 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 1.2 }}
         >
-          <div className="relative w-[340px] h-[340px] flex items-center justify-center">
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-slate-800/60 via-accent/10 to-slate-900/60 blur-2xl" />
+          <div className="relative w-[340px] h-[210px] flex items-center justify-center">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-slate-800/70 via-accent/10 to-slate-900/70 blur-xl" />
             <motion.div
-              className="relative z-10 glass-card border-2 border-slate-700/60 shadow-xl p-0 flex flex-col gap-0 items-stretch overflow-hidden"
+              className="relative z-10 border border-accent/30 shadow-xl p-4 flex flex-col gap-3 items-stretch overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900/80 to-slate-800/80"
+              style={{ minHeight: 180, maxWidth: 320 }}
               initial={{ y: 30, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 1, delay: 1.5 }}
             >
-              {/* User message */}
-              <div className="px-6 pt-6 pb-2 bg-gradient-to-r from-slate-900/80 to-slate-800/80 text-slate-200 font-semibold text-sm rounded-t-2xl border-b border-slate-700/40">
-                <span className="text-accent font-bold mr-2">User:</span>How do I add authentication to my Next.js app?
+              {/* User message (right) */}
+              <div className="flex justify-end">
+                <div className="max-w-[80%] bg-gradient-to-br from-accent/40 to-slate-800/80 border border-accent/40 text-slate-100 px-4 py-2 rounded-xl rounded-br-sm shadow-md text-sm font-medium">
+                  What is RepoMind?
+                </div>
               </div>
-              {/* AI message */}
-              <div className="px-6 pt-4 pb-2 bg-gradient-to-r from-slate-800/80 to-slate-900/80 text-accent-foreground text-sm border-b border-accent/30">
-                <span className="text-accent font-bold mr-2">AI:</span>You can use Clerk for seamless authentication in Next.js. Here's a simple example:
+              {/* AI message (left) */}
+              <div className="flex justify-start items-start gap-2">
+                <div className="flex-shrink-0 w-7 h-7 bg-accent/20 flex items-center justify-center rounded-full">
+                  <Sparkles className="w-4 h-4 text-accent" />
+                </div>
+                <div className="max-w-[80%] bg-gradient-to-br from-slate-900/90 to-slate-800/90 border border-accent/30 text-slate-100 px-4 py-2 rounded-xl rounded-bl-sm shadow text-sm font-medium">
+                  RepoMind is your intelligent <span className="text-accent font-semibold">GitHub codebase assistant</span>. Instantly ask questions, get AI-powered answers, and manage your projects.<br/>
+                  <span className="text-accent font-semibold">Click "Get Started" to experience the future of code understanding!</span>
+                </div>
               </div>
-              {/* Code snippet */}
-              <pre className="bg-gradient-to-br from-slate-900/90 to-slate-800/90 rounded-b-2xl p-4 text-xs text-accent font-mono border-t-2 border-accent/30 overflow-x-auto">
-{`// 1. Install Clerk
-npm install @clerk/nextjs
-
-// 2. Wrap your app in <ClerkProvider> in _app.js or layout.tsx
-import { ClerkProvider } from '@clerk/nextjs';
-
-export default function App({ Component, pageProps }) {
-  return (
-    <ClerkProvider>
-      <Component {...pageProps} />
-    </ClerkProvider>
-  );
-}
-
-// 3. Use <SignIn /> and <SignUp /> components in your pages
-`}
-              </pre>
             </motion.div>
           </div>
         </motion.div>
+        {/* Scroll indicator */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center z-20">
+          <span className="text-accent animate-bounce">
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24"><path d="M12 16V4M12 16l-6-6m6 6l6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </span>
+        </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="relative z-10 w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-6 pb-24">
+      <section id="features" className="relative z-10 w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-6 pb-24 mt-8">
         {features.map((f, i) => (
           <motion.div
             key={f.title}
-            className={`glass-card p-8 flex flex-col items-center text-center border-2 ${f.border} ${f.shadow} bg-gradient-to-br ${f.bg} hover:scale-[1.04] transition-transform duration-300 group relative overflow-hidden`}
+            className={`p-8 flex flex-col items-center text-center border-2 ${f.border} ${f.shadow} bg-slate-800/60 backdrop-blur-md hover:scale-[1.04] transition-transform duration-300 group relative overflow-hidden rounded-2xl`} 
+            style={{ background: 'linear-gradient(135deg, rgba(30,41,59,0.7) 60%, rgba(51,65,85,0.5) 100%)' }}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 + i * 0.2 }}
